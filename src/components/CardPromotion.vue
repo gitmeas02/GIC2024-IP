@@ -16,6 +16,11 @@ export default {
         button:String, 
         backgroundColor:String
     },
+    methods:{
+        btn_promotion(){
+            alert("Hello");
+        }
+    }
 }
 </script>
 <style scoped>
