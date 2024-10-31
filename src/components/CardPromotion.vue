@@ -4,7 +4,7 @@
           <!--    //battleStrawberry -->
             <div class="contents">
             <label>{{ description }}</label>
-            <button @click="btn_promotion">{{ button }}<span><i class="fa-solid fa-arrow-right"></i></span></button>
+            <button @click="onClick">{{ button }}<span><i class="fa-solid fa-arrow-right"></i></span></button>
             </div>
         </div>
 </template>
@@ -14,7 +14,8 @@ export default {
         image:String,
         description:String,
         button:String, 
-        backgroundColor:String
+        backgroundColor:String,
+        onClick:Function
     },
     methods:{
         btn_promotion(){

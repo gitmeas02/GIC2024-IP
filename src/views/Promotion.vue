@@ -8,6 +8,7 @@
         :image="promotion.image"
         :button="promotion.button"
         :backgroundColor="promotion.backgroundColor"
+        :onClick="promotion.onClick"
       />
     </div>
 </div>
@@ -18,10 +19,13 @@
     export default {
         components: {CardPromotion},
         setup(){
+          const altertHi=()=> alert("Hi");
+          const altertHello=()=>alert("Hello");
+          const altertNothing=()=>alert("Nothing");
      const promotions=ref([
-    {id:1,description: 'Make your Breakfast Healthy and Easy',button: 'Shop Now',image:'./src/assets/images/BattleStrawberry.svg', backgroundColor:'#F3E8E8'},
-    {id:2,description: 'Everyday Fresh & Clean with Our Products',button: 'Shop Now',image:'./src/assets/images/Onion.svg',backgroundColor:'#F0E8D5'},
-    {id:3,description: 'The best Organic Products Online',button: 'Shop Now',image:'./src/assets/images/Vegetables2.svg',backgroundColor:'#E7EAF3'},
+    {id:1,description: 'Make your Breakfast Healthy and Easy',button: 'Shop Now',image:'./src/assets/images/BattleStrawberry.svg', backgroundColor:'#F3E8E8',onClick: altertHi},
+    {id:2,description: 'Everyday Fresh & Clean with Our Products',button: 'Shop Now',image:'./src/assets/images/Onion.svg',backgroundColor:'#F0E8D5', onClick:altertHello},
+    {id:3,description: 'The best Organic Products Online',button: 'Shop Now',image:'./src/assets/images/Vegetables2.svg',backgroundColor:'#E7EAF3',onClick: altertNothing},
         ]);
         return {promotions};
             },
