@@ -4,7 +4,7 @@
           <!--    //battleStrawberry -->
             <div class="contents">
             <label>{{ description }}</label>
-            <button>{{ button }}<span><i class="fa-solid fa-arrow-right"></i></span></button>
+            <button @click="btn_promotion">{{ button }}<span><i class="fa-solid fa-arrow-right"></i></span></button>
             </div>
         </div>
 </template>
