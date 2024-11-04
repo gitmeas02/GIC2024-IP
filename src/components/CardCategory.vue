@@ -1,22 +1,24 @@
 <template>
-    <div class="fruits" :style={background}>
-    <img :src="image" :alt="fruitName">
+  <div class="fruits" :style="{ backgroundColor: color }">
+    <img :src="image" :alt="name" />
     <div class="name-price">
-      <p>{{fruitName}}</p>
-      <p class="price"><span>{{item}}</span>items</p>
+      <p>{{ name }}</p>
+      <p class="price"><span>{{ productCount }}</span> items</p>
     </div>
   </div>
 </template>
+
 <script>
 export default {
   props: {
-    fruitName: String,
-    item: Number, // Corrected prop type
+    name: String,
+    productCount: Number,
     image: String,
-    background:String
+    color: String,
   },
 };
 </script>
+
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
    .fruits{
@@ -61,9 +63,9 @@ export default {
   font-family:"Itim", cursive;
   font-style:oblique;
    }
-   p span{
+   span{
   font-size: 12px;
-  color: gray;
+  color: rgb(0, 0, 0);
 }
 .fruits{
   border: 1px solid #81b13d;
