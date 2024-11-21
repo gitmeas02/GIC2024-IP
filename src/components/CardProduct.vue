@@ -1,33 +1,42 @@
- <template>
+<template>
   <div class="card">
-    <p class="discount">
+    <!-- Discount Label -->
+    <p class="discount" v-if="promotionAsPercentage > 0">
       <span class="number-discount">-{{ promotionAsPercentage }}%</span>
     </p>
-    <img :src="'http://localhost:3000/' + images[0]" alt="" /> Removed extra space here -->
-     <div class="title-rate-price">
+    
+    <!-- Product Image -->
+    <img :src="'http://localhost:3000/' + images[0]" alt="Product Image" class="product-image" />
+    
+    <!-- Title, Rating, and Size -->
+    <div class="title-rate-price">
       <label for="" class="title">
         <span class="foodname">{{ name }}</span>
       </label>
       <div class="star-rate">
         <div class="stars">
-          <img src="../assets/ProductSVG/start.svg" alt="" />
-          <img src="../assets/ProductSVG/start.svg" alt="" />
-          <img src="../assets/ProductSVG/start.svg" alt="" />
-          <img src="../assets/ProductSVG/start.svg" alt="" />
-          <img src="../assets/ProductSVG/nocolorStar.svg" alt="" />
+          <!-- Generate filled stars based on rating -->
+          <img v-for="n in fullStars" :key="'full-' + n" src="../assets/ProductSVG/start.svg" alt="Filled Star" />
+          <!-- Generate empty stars based on the rating -->
+          <img v-for="n in emptyStars" :key="'empty-' + n" src="../assets/ProductSVG/nocolorStar.svg" alt="Empty Star" />
         </div>
         <p class="rate">(<span>{{ rating }}</span>)</p>
       </div>
       <p class="gram">
-        <span class="number-gram">{{ size }}</span>
+        <span class="number-gram">{{ size }}g</span>
       </p>
     </div>
+
+    <!-- Price and Add Section -->
     <div class="choose">
       <p class="price">
-        <span class="after-discount-price">${{ price }}</span>
+        <span class="after-discount-price" v-if="promotionAsPercentage > 0">
+          ${{ discountedPrice }}
+        </span>
         <span class="discount-price">${{ price }}</span>
       </p>
       <div class="add-section">
+        <!-- Quantity Input Section -->
         <div v-if="showInput" class="input-number">
           <button class="btn-adjust" @click="decreaseQuantity">-</button>
           <input
@@ -39,6 +48,7 @@
           />
           <button class="btn-adjust" @click="increaseQuantity">+</button>
         </div>
+        <!-- Add Button Section -->
         <button v-else class="btn-add" @click="toggleInput">
           <span>Add</span>
           <span class="iconify" data-icon="material-symbols:add"></span>
@@ -54,7 +64,10 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'CardProduct',
   props: {
-    promotionAsPercentage: Number,
+    promotionAsPercentage: {
+      type: Number,
+      default: 0,
+    },
     image: String,
     name: String,
     rating: Number,
@@ -88,13 +101,24 @@ export default defineComponent({
   },
   computed: {
     images() {
-      console.log(this.image)
-      return JSON.parse(this.image)
-    }
-  }
+      // Parse the image string into an array
+      return JSON.parse(this.image);
+    },
+    fullStars() {
+      // Generate an array of full stars based on the rating
+      return Array(Math.floor(this.rating)).fill(1);
+    },
+    emptyStars() {
+      // Generate an array of empty stars based on the rating
+      return Array(5 - Math.floor(this.rating)).fill(1);
+    },
+    discountedPrice() {
+      // Calculate the discounted price if there's a promotion
+      return (this.price * (1 - this.promotionAsPercentage / 100)).toFixed(2);
+    },
+  },
 });
 </script>
-
 
 
 <style scoped>

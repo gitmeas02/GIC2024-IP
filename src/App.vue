@@ -1,21 +1,40 @@
 <template>
- <HeaderBar/>
-<Category/>
-<HeaderBar
-        title="Popular Product"
-        paddingTop="10px"
-        paddingBottom="0px"/>
-<Promotion/>
-<Products/>
+  <div>
+    <HeaderBar/>
+    <HeaderBar 
+    title="Popular Product"
+    paddingTop="10px"
+    paddingBottom="0px"/>
+    <Category />
+    <Promotion />
+    <Products />
+    <GetProductsByGroup />
+    <GetProductsByCategoryId />
+    <GetPopularProductsByCountSold />
+    <GetCategoriesByGroup />
+  </div>
 </template>
+
 <script>
-import Category from './views/Category.vue';
 import HeaderBar from './views/HeaderBar.vue';
+import Category from './views/Category.vue';
 import Promotion from './views/Promotion.vue';
 import Products from './views/Products.vue';
-export default{
-  components:{
-    Category,Promotion,HeaderBar,Products
+import GetProductsByGroup from './views/GetProductsByGroup.vue'
+import GetProductsByCategoryId from './views/GetProductsByCategoryId.vue';
+import GetPopularProductsByCountSold from './views/GetPopularProductsByCountSold.vue';
+import GetCategoriesByGroup from './views/GetCategoriesByGroup.vue';
+
+export default {
+  components: {
+    HeaderBar,
+    Category,
+    Promotion,
+    Products,
+    GetProductsByGroup,
+    GetProductsByCategoryId,
+    GetPopularProductsByCountSold,
+    GetCategoriesByGroup,
   }
 }
 </script>

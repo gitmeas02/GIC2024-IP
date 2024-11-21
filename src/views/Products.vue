@@ -16,9 +16,8 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
 import CardProduct from '../components/CardProduct.vue';
-import axios from 'axios';
+import { useProductStore } from '@/stores/Product';
 
 export default {
   name: 'Products',
@@ -26,31 +25,21 @@ export default {
     CardProduct,
   },
   setup() {
-    const products = ref([]);
-    
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/products');
-        products.value = response.data.map((product) => ({
-          id: product.id,
-          name: product.name,
-          rating: product.rating,
-          size: product.size,
-          image: product.image,
-          price: product.price,
-          promotionAsPercentage: product.promotionAsPercentage,
-        }));
-      } catch (error) {
-        console.error('Error loading products:', error);
-      }
+    const store = useProductStore();
+
+    // Fetch data when the component is mounted
+    store.fetchProducts();
+    store.fetchCategories();
+    store.fetchGroups();
+
+    // Return products to use in the template
+    return {
+      products: store.products,
     };
-
-    onMounted(fetchProducts); // Fetch products when the component is mounted
-
-    return { products }; // Return products to the template
   },
 };
 </script>
+
 
 <style>
 .products-container {
@@ -90,3 +79,27 @@ export default {
   }
 }
 </style> 
+<!-- setup() {
+   const products = ref([]);
+  
+   const fetchProducts = async () => {
+     try {
+       const response = await axios.get('http:localhost:3000/api/products');
+       products.value = response.data.map((product) => ({
+         id: product.id,
+         name: product.name,
+         rating: product.rating,
+         size: product.size,
+         image: product.image,
+         price: product.price,
+         promotionAsPercentage: product.promotionAsPercentage,
+       }));
+     } catch (error) {
+       console.error('Error loading products:', error);
+     }
+   };
+
+   onMounted(fetchProducts);  Fetch products when the component is mounted
+
+   return { products };  Return products to the template
+}, -->
