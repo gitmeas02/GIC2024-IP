@@ -22,6 +22,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { ref } from 'vue';
+
 export default {
   props: {
     title: {
@@ -36,7 +39,21 @@ export default {
       type: String,
       default: '0px'
     }
-  }
+  },
+  // setup(){
+  //   const group= ref([]);
+  //     const FetchGroup = async => (){
+  //     try{
+  //      const res= await axios.get('http://localhost:3000/api/groups');
+  //      group.value= res.data.map((item)=>{
+
+  //      })
+  //     }catch(error){
+  //       console.log(error);
+  //     }
+  //     return {group};
+  //   }
+  // }
 };
 </script>
 
@@ -48,11 +65,11 @@ export default {
 .header {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   padding-left: 100px;
   padding-right: 100px;
-  align-content: center;
-  gap:300px;
+  align-content:center;
+  
 }
 
 ul {
