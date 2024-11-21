@@ -1,84 +1,127 @@
 <template>
-  <div class="s">
-    <div class="products-container">
-      <CardProduct
-        v-for="product in products"
-        :key="product.id"
-        :promotionAsPercentage="product.promotionAsPercentage"
-        :name="product.name"
-        :image="product.image"
-        :rating="product.rating"
-        :size="product.size"
-        :price="product.price"
-      />
+  <div class="product-page">
+    <h1>Products</h1>
+
+    <!-- Categories Section -->
+    <div class="categories">
+      <h2>Categories</h2>
+      <ul>
+        <li 
+          v-for="category in categories" 
+          :key="category.id" 
+          @click="fetchProductsByCategory(category.id)"
+        >
+          {{ category.name }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- Product List Section -->
+    <div class="products">
+      <h2>Products</h2>
+      <div class="product-grid">
+        <CardProduct 
+          v-for="product in products" 
+          :key="product.id" 
+          :promotionAsPercentage="product.promotionAsPercentage" 
+          :image="product.images" 
+          :name="product.name" 
+          :rating="product.rating" 
+          :size="product.size" 
+          :price="product.price" 
+        />
+      </div>
+    </div>
+
+    <!-- Popular Products Section -->
+    <div class="popular-products">
+      <h2>Popular Products</h2>
+      <div class="product-grid">
+        <CardProduct 
+          v-for="product in products" 
+          :key="product.id" 
+          :promotionAsPercentage="product.promotionAsPercentage" 
+          :image="product.images" 
+          :name="product.name" 
+          :rating="product.rating" 
+          :size="product.size" 
+          :price="product.price" 
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import CardProduct from '../components/CardProduct.vue';
+import CardProduct from '@/components/CardProduct.vue';
 import { useProductStore } from '@/stores/Product';
+import { defineComponent, onMounted } from 'vue';
 
-export default {
-  name: 'Products',
-  components: {
-    CardProduct,
-  },
-  setup() {
-    const store = useProductStore();
-
-    // Fetch data when the component is mounted
-    store.fetchProducts();
-    store.fetchCategories();
-    store.fetchGroups();
-
-    // Return products to use in the template
+export default defineComponent({
+  name: 'Product',
+  components: { CardProduct },
+  data() {
     return {
-      products: store.products,
+      groupName: 'default-group', // Default group name
+      categoryId: null, // Default category ID
     };
   },
-};
+  computed: {
+    categories() {
+      return this.productStore.getCategoriesByGroup(this.groupName);
+    },
+    products() {
+      if (this.categoryId) {
+        return this.productStore.getProductsByCategory(this.categoryId);
+      }
+      return this.productStore.getProductsByGroup(this.groupName);
+    },
+    popularProducts() {
+      return this.productStore.getPopularProducts();
+    },
+  },
+  methods: {
+    async fetchCategories() {
+      await this.productStore.fetchCategories();
+    },
+    async fetchProducts() {
+      await this.productStore.fetchProducts();
+    },
+    async fetchProductsByCategory(categoryId) {
+      this.categoryId = categoryId;
+    },
+  },
+  mounted() {
+    this.fetchCategories();
+    this.fetchProducts();
+  },
+  setup() {
+    const productStore = useProductStore();
+    onMounted(() => {
+      productStore.fetchGroups();
+      productStore.fetchPromotions();
+    });
+
+    return { productStore };
+  },
+});
 </script>
 
-
 <style>
-.products-container {
+.product-page {
+  margin: 20px;
+}
+.categories ul {
+  list-style: none;
+  padding: 0;
+}
+.product-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Create 5 equal columns */
-  gap: 12px; /* Gap between the grid items */
-  justify-content: start; /* Align items to the start */
-  padding: 22px; /* Padding around the grid */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
+</style>
 
-.s {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-@media (max-width: 1224px) {
-  .products-container {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 1010px) {
-  .products-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 800px) {
-  .products-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (max-width: 600px) {
-  .products-container {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-</style> 
 <!-- setup() {
    const products = ref([]);
   

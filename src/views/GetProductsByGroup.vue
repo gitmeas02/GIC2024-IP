@@ -1,33 +1,46 @@
 <template>
-    <div>
-      <h1>Products by Group: {{ groupName }}</h1>
-      <ul>
-        <li v-for="product in productsByGroup" :key="product.id">
-          {{ product.name }} - Sold: {{ product.countSold }}
-        </li>
-      </ul>
+  <div>
+    <h2>Products in Group {{ groupName }}</h2>
+    <div class="products-list">
+      <CardProduct
+        v-for="product in products"
+        :key="product.id"
+        :promotionAsPercentage="product.promotionAsPercentage"
+        :name="product.name"
+        :image="product.image"
+        :rating="product.rating"
+        :size="product.size"
+        :price="product.price"
+      />
     </div>
-  </template>
-  
-  <script>
-  import { useProductStore } from '@/stores/Product';
-  
-  export default {
-    data() {
-      return {
-        groupName: 'fruits', // You can change this dynamically
-      };
-    },
-    computed: {
-      productsByGroup() {
-        const store = useProductStore();
-        return store.getProductsByGroup(this.groupName);
-      },
-    },
-    mounted() {
-      const store = useProductStore();
-      store.fetchProducts();
-    },
-  };
-  </script>
-  
+  </div>
+</template>
+
+<script>
+import { useProductStore } from "@/stores/Product";
+import CardProduct from '@/components/CardProduct.vue';
+import { ref } from "vue";
+
+export default {
+  name: "GetProductsByGroup",
+  props: {
+    groupName: String,
+  },
+  components: {
+    CardProduct,
+  },
+  setup(props) {
+    const store = useProductStore();
+    const products = ref([]);
+
+    const fetchProducts = async () => {
+      await store.fetchProductsByGroup(props.groupName);
+      products.value = store.products;
+    };
+
+    fetchProducts();
+
+    return { products };
+  },
+};
+</script>

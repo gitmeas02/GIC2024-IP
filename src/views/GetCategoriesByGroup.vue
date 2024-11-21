@@ -1,33 +1,33 @@
 <template>
-    <div>
-      <h1>Categories by Group: {{ groupName }}</h1>
-      <ul>
-        <li v-for="category in getCategoryByGroup" :key="category.id">
-          {{ category.name }}
-        </li>
-      </ul>
-    </div>
-  </template>
-  
-  <script>
-  import { useProductStore } from '@/stores/Product';
-  
-  export default {
-    data() {
-      return {
-        groupName: 'fruits', // Can be dynamic
-      };
-    },
-    computed: {
-      getCategoryByGroup() {
-        const store = useProductStore();
-        return store.getCategoriesByGroup(this.groupName);
-      },
-    },
-    mounted() {
-      const store = useProductStore();
-      store.fetchCategories();
-    },
-  };
-  </script>
-  
+  <div>
+    <h2>Categories in {{ groupName }}</h2>
+    <ul>
+      <li v-for="category in categories" :key="category.id">{{ category.name }}</li>
+    </ul>
+  </div>
+</template>
+
+<script>
+import { useProductStore } from "@/stores/Product";
+import { ref } from "vue";
+
+export default {
+  name: "GetCategoriesByGroup",
+  props: {
+    groupName: String,
+  },
+  setup(props) {
+    const store = useProductStore();
+    const categories = ref([]);
+
+    const fetchCategories = async () => {
+      await store.fetchCategoryByGroup(props.groupName);
+      categories.value = store.categories;
+    };
+
+    fetchCategories();
+
+    return { categories };
+  },
+};
+</script>

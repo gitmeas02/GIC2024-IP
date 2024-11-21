@@ -1,33 +1,46 @@
 <template>
-    <div>
-      <h1>Products by Category ID: {{ categoryId }}</h1>
-      <ul>
-        <li v-for="product in getProductsByCategoryId(categoryId)" :key="product.id">
-          {{ product.name }} - Price: ${{ product.price }}
-        </li>
-      </ul>
+  <div>
+    <h2>Products in Category {{ categoryId }}</h2>
+    <div class="products-list">
+      <CardProduct
+        v-for="product in products"
+        :key="product.id"
+        :promotionAsPercentage="product.promotionAsPercentage"
+        :name="product.name"
+        :image="product.image"
+        :rating="product.rating"
+        :size="product.size"
+        :price="product.price"
+      />
     </div>
-  </template>
-  
-  <script>
-  import { useProductStore } from '@/stores/Product';
-  
-  export default {
-    data() {
-      return {
-        categoryId: 1, // You can change the category ID dynamically
-      };
-    },
-    computed: {
-      getProductsByCategoryId() {
-        const store = useProductStore();
-        return store.getProductsByCategoryId;
-      },
-    },
-    mounted() {
-      const store = useProductStore();
-      store.fetchProducts();
-    },
-  };
-  </script>
-  
+  </div>
+</template>
+
+<script>
+import { useProductStore } from "@/stores/Product";
+import CardProduct from '@/components/CardProduct.vue';
+import { ref } from "vue";
+
+export default {
+  name: "GetProductsByCategoryId",
+  props: {
+    categoryId: Number,
+  },
+  components: {
+    CardProduct,
+  },
+  setup(props) {
+    const store = useProductStore();
+    const products = ref([]);
+
+    const fetchProducts = async () => {
+      await store.fetchProductsByCategory(props.categoryId);
+      products.value = store.products;
+    };
+
+    fetchProducts();
+
+    return { products };
+  },
+};
+</script>
