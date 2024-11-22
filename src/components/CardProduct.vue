@@ -1,4 +1,3 @@
-
 <template>
   <div class="card">
     <!-- Discount Label -->
