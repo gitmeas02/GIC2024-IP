@@ -37,7 +37,7 @@
     <div class="popular-products">
       <h2>Popular Products</h2>
       <div class="product-grid">
-        <CardProduct 
+        <CardProduct
           v-for="product in products" 
           :key="product.id" 
           :promotionAsPercentage="product.promotionAsPercentage" 
