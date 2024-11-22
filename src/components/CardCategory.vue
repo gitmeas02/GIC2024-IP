@@ -1,6 +1,6 @@
 <template>
   <div class="fruits" :style="{ backgroundColor: color }">
-    <img :src="'http://localhost:3000/api/categories'+image" :alt="name" />
+    <img :src="'http://localhost:3000/'+image" :alt="name" />
     <div class="name-price">
       <p>{{ name }}</p>
       <p class="price"><span>{{ productCount }}</span> items</p>
