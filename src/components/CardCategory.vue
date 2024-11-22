@@ -81,7 +81,7 @@ export default {
 }
 
 .fruits:hover{
-border: 1px solid #ca7878;
+border: 1px solid #86daa2;
 transform: scale(1.1);
 transition: 0.2s;
 }
