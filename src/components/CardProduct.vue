@@ -1,248 +1,252 @@
+
 <template>
   <div class="card">
-    <p class="discount"><span class="number-discount">-{{ discountPercent }}%</span></p>
-    <div class="container-img">
-      <img :src="image" alt="" class="foods">
-    </div>
+    <!-- Discount Label -->
+    <p class="discount" v-if="promotionAsPercentage > 0">
+      <span class="number-discount">-{{ promotionAsPercentage }}%</span>
+    </p>
+
+    <!-- Product Image -->
+    <img :src="'http://localhost:3000/' + images[0]" alt="Product Image" class="product-image" />
+
+    <!-- Title, Rating, and Size -->
     <div class="title-rate-price">
-      <label for="" class="title">
+      <label class="title">
         <span class="foodname">{{ name }}</span>
-        <span class="description">{{ description }}</span>
       </label>
       <div class="star-rate">
         <div class="stars">
-          <img src="../assets/ProductSVG/start.svg" alt="">
-          <img src="../assets/ProductSVG/start.svg" alt="">
-          <img src="../assets/ProductSVG/start.svg" alt="">
-          <img src="../assets/ProductSVG/start.svg" alt="">
-          <img src="../assets/ProductSVG/nocolorStar.svg" alt="">
+          <img v-for="n in fullStars" :key="'full-' + n" src="../assets/ProductSVG/start.svg" alt="Filled Star" />
+          <img v-for="n in emptyStars" :key="'empty-' + n" src="../assets/ProductSVG/nocolorStar.svg" alt="Empty Star" />
         </div>
-        <p class="rate">(<span>{{ rateNumber }}</span>)</p>
+        <p class="rate">(<span>{{ rating }}</span>)</p>
       </div>
       <p class="gram">
-        <span class="number-gram">{{ gramNumber }}</span>
-        <span class="namegram">gram</span>
+        <span class="number-gram">{{ size }}g</span>
       </p>
     </div>
+
+    <!-- Price and Add Section -->
     <div class="choose">
       <p class="price">
-        <span class="after-discount-price">${{ price }}</span>
-        <span class="discount-price">{{ discountPrice }}</span>
+        <span class="after-discount-price" v-if="promotionAsPercentage > 0">
+          ${{ discountedPrice }}
+        </span>
+        <span class="discount-price">${{ price }}</span>
       </p>
-      <div class="input-number">
-        <input type="number" id="number" class="select-number">
-        <div class="arrows">
-          <img src="../assets/svg/upArrow.svg" alt="" class="up">
-          <img src="../assets/svg/downArrow.svg" alt="" class="down">
-        </div>
+      <div class="add-section">
+        <button class="btn-add" @click="addToCart">
+          Add to Cart
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'CardProduct',
   props: {
-    discountPercent: Number,
+    promotionAsPercentage: Number,
     image: String,
     name: String,
-    description: String,
-    rateNumber: Number,
-    gramNumber: Number,
+    rating: Number,
+    size: Number,
     price: Number,
-    discountPrice: Number,
-  }
-};
+  },
+  computed: {
+    images() {
+      return JSON.parse(this.image);
+    },
+    fullStars() {
+      return Array(Math.floor(this.rating)).fill(1);
+    },
+    emptyStars() {
+      return Array(5 - Math.floor(this.rating)).fill(1);
+    },
+    discountedPrice() {
+      return (this.price * (1 - this.promotionAsPercentage / 100)).toFixed(2);
+    },
+  },
+  methods: {
+    addToCart() {
+      alert(`Added ${this.name} to the cart.`);
+    },
+  },
+});
 </script>
 
-<style>
-/* .container-product{
-                display: flex;
-                width: auto;
-                gap: 10px;
-                flex-wrap: wrap;
-} */
-.discount{
-    display: flex;
-    width:40px;
-    height:23.4px;
-    background-color: aqua;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1px 30px 30px 1px;
-    position: relative;
-    top:14px;
+
+<style scoped>
+.strike {
+  text-decoration: line-through;
 }
-.number-discount{
-    font-size: 12.6px;
-    position: absolute;
+
+p{
+  margin:0;
 }
-        .card{
-            border: 1px solid rgb(40, 227, 215);
-            width:170px;
-            border-radius: 10px;
-            overflow:hidden;
-        }
-        .stars img{
-         width: 12px;
-         height: 12px;
-        }
-        .container-img{
-            display: flex;
-            justify-content: center;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            width:180px;
-        }
-        .container-img img{
-            width:140px;
-            height: 140px;
-        }
-        p{
-            margin: 0;
-        }
-       .title .foodname{
-            font-size: 12px;
-            color: gray;
-        }
-        .title{
-            width: 170px;
-            height: auto;
-        }
-        label{
-            margin-bottom:0;
-            font-size: 13px;
-            display: flex;
-            font-family: Georgia, 'Times New Roman', Times, serif;
-            flex-direction: column;
-        }
-        .star-rate{
-            display:flex;
-            align-content: center;
-            gap: 10px;
-            }
+/* Card container */
+.card {
+  border: 1px solid #28e3d7;
+  width: 253px;
+  height: 316px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #fff;
+  transition: box-shadow 0.3s ease;
+}
+.card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+img{
+  width: 204px;
+  height:146px;
+}
+/* Discount banner */
+.discount {
+  display: flex;
+  width: 50px;
+  height: 25px;
+  background-color: #00c4cc;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 15px 15px 0;
+  position: relative;
+  top: 10px;
+  left: 0px;
+}
+.number-discount {
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+}
 
-            .star-rate .stars img {
-            width: 12px;
-            height: 12px;
-            }
+/* image container */
+.container-img {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+.container-img{
+  width: 150px;
+  height: 150px;
+  border-radius: 5px;
+}
 
-            .star-rate p {
-            margin: 0;
-            font-size: 13px;
-            color: #333;
-            }
-            p,.rate{
-            display: inline; 
-            }
-
-            .gram {
-                display: flex;
-                align-content: center;
-                flex-direction: row;
-                gap: 10px;
-                margin-bottom: 0;
-            }
-
-            .select-number {
-            width: 65px;
-            height: 27px;
-            font-size: 14px;
-            border: 2px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-            position: relative;
-            color:rgb(95, 201, 95);
-        }
-    
-        .select-number::-webkit-inner-spin-button,
-        .select-number::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-        }
-     .gram{
-        font-family: 'Lucida Sans';
-        font-size: 17px;
-     }
-        .select-number:focus {
-            border-color: rgb(102, 236, 189);
-            outline: none;
-        }
-
-        .select-number {
-            border-color: rgb(70, 229, 173);
-            padding-left: 7px;
-        }
-
-        .down,
-        .up {
-            width: 7px;
-            cursor: pointer;
-            padding-right: 5px;
-        }
-
-        .arrows {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .input-number {
-          height: fit-content;
-            position: relative;
-            border-radius: 10px;
-            border: 1px;
-            display: flex;
-            justify-content: center;
-            background-color: rgb(56, 187, 143);
-            width: fit-content;
-        }
-        .discount-price{
-            text-decoration:line-through gray;
-            font-size: 16px;
-            padding-left: 10px;
-        }
-        .after-discount-price{
-                font-size: 18px;
-        }
-        p .price{
-            height: auto;
-            display: flex;
-            gap:10px;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            padding-bottom: 0;
-            
-        }
-        .arrows {
-            position: absolute;
-            right: 4px;
-            top: 0;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 2px;
-        }
-        .title-rate-price{
-        padding-left: 10px;
-        }
-       .choose{
-        margin-top: 2px;
-        display: flex;
-        justify-content: space-between;
-        padding-left: 10px;
-        padding-right: 10px;
-        padding-bottom:4px ;
-       }
-       .description {
+/* Title and details */
+.title-rate-price {
+  padding: 10px;
+}
+.foodname {
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+}
+.description {
   font-size: 12px;
   color: #666;
   display: inline-block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 150px; /* Adjust the max-width as needed */
+  max-width: 150px;
 }
-</style>
+.choose{
+  display: flex;
+  justify-content: space-between;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+/* Ratings */
+.star-rate {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+}
+.stars img {
+  width: 14px;
+  height: 14px;
+}
+.rate {
+  font-size: 12px;
+  color: #888;
+}
+
+/* Price section */
+.price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+}
+.discount-price {
+  text-decoration: line-through;
+  font-size: 12px;
+  color: #888;
+}
+.after-discount-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Add section */
+.add-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 0;
+}
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  background-color: #38bb8f;
+  color: #fff;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.btn-add:hover {
+  background-color: #2aa672;
+}
+
+/* Input section */
+.input-number {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.select-number {
+  width: 50px;
+  height: 30px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.btn-adjust {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-adjust:hover {
+  background-color: #ddd;
+}
+label{
+  display: flex;
+  flex-direction: column;
+}
+</style> 
