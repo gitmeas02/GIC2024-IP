@@ -42,6 +42,7 @@
   </div>
 </template>
 
+
 <script>
 import { defineComponent } from 'vue';
 
@@ -76,21 +77,15 @@ export default defineComponent({
   },
 });
 </script>
-
-
 <style scoped>
-.strike {
-  text-decoration: line-through;
-}
-
 p{
   margin:0;
 }
 /* Card container */
 .card {
   border: 1px solid #28e3d7;
-  width: 253px;
-  height: 316px;
+  width: 243px;
+  height: auto;
   border-radius: 10px;
   overflow: hidden;
   background-color: #fff;
