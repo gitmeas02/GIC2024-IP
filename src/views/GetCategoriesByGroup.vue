@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div>
     <h2>Categories in {{ groupName }}</h2>
     <ul>
@@ -30,4 +30,4 @@ export default {
     return { categories };
   },
 };
-</script> -->
+</script>

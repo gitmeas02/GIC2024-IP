@@ -1,8 +1,13 @@
 <template>
   <div class="C-category">
+    <HeaderBar
+      :title="'Featured Products'"
+      :ListBar="groups"
+      @change-nav="updateCurrentGroup"
+    />
     <div class="container">
       <CardCategory
-        v-for="category in categories"
+        v-for="category in filteredCategories"
         :key="category.id"
         :name="category.name"
         :productCount="category.productCount"
@@ -14,28 +19,46 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-import axios from 'axios'; // Import Axios
-import CardCategory from '../components/CardCategory.vue';
+import CardCategory from '@/components/CardCategory.vue';
+import HeaderBar from '@/components/HeaderBar.vue';
+import { mapState } from 'pinia';
+import { useProductStore } from '@/stores/Product';
 
 export default {
-  components: { CardCategory },
-
+  components: { CardCategory, HeaderBar },
   setup() {
-    const categories = ref([]);
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/categories');
-        categories.value = response.data;
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      }
-    };
-
-    onMounted(fetchCategories); // Fetch categories when the component is mounted
-
-    return { categories };
+    const store = useProductStore();
+    return { store };
   },
+  data() {
+    return {
+      currentGroupName: "All" // Default to 'All' to show all categories initially
+    };
+  },
+  computed: {
+    ...mapState(useProductStore, {
+      groups: "groups",
+      categories: "categories"
+    }),
+    filteredCategories() {
+      // Filter categories based on the selected group
+      if (this.currentGroupName === "All") {
+        return this.categories;
+      }
+      return this.categories.filter(
+        (category) => category.group === this.currentGroupName
+      );
+    }
+  },
+  methods: {
+    updateCurrentGroup(groupName) {
+      this.currentGroupName = groupName; // Update the selected group
+    }
+  },
+  async mounted() {
+    await this.store.fetchCategories();
+    await this.store.fetchGroups();
+  }
 };
 </script>
 
@@ -44,13 +67,13 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  justify-content:start; /* Center items on larger screens by default */
+  justify-content: center; /* Center items on larger screens by default */
   align-items: center;
   padding: 20px;
 }
-.C-category{
+.C-category {
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
-
 </style>
