@@ -1,8 +1,8 @@
 <template>
   <div class="card">
     <!-- Discount Label -->
-    <p class="discount" v-if="promotionAsPercentage > 0">
-      <span class="number-discount">-{{ promotionAsPercentage }}%</span>
+    <p class="discount" v-if="promotionAsPercentage > 0" :style="{backgroundColor:changeColor}"  >
+      <span class="number-discount">{{ changeValue }}</span>
     </p>
 
     <!-- Product Image -->
@@ -28,13 +28,13 @@
     <!-- Price and Add Section -->
     <div class="choose">
       <p class="price">
-        <span class="after-discount-price" v-if="promotionAsPercentage > 0">
+        <span class="after-discount-price">
           ${{ discountedPrice }}
         </span>
-        <span class="discount-price">${{ price }}</span>
+        <span v-if="promotionAsPercentage > 0"class="discount-price">${{ price }} </span>
       </p>
       <div class="add-section">
-        <button class="btn-add" @click="addToCart">
+        <button class="btn-add" @click="addToCart" >
           Add to Cart
         </button>
       </div>
@@ -57,6 +57,16 @@ export default defineComponent({
     price: Number,
   },
   computed: {
+    changeValue(){
+      if(this.promotionAsPercentage>=50 && this.promotionAsPercentage<80){
+        return "Hot";
+        
+      }if(this.promotionAsPercentage>=80 ) {
+         return "Sale";
+      } else {
+        return `- ${this.promotionAsPercentage} %`;
+      }
+    },
     images() {
       return JSON.parse(this.image);
     },
@@ -69,6 +79,17 @@ export default defineComponent({
     discountedPrice() {
       return (this.price * (1 - this.promotionAsPercentage / 100)).toFixed(2);
     },
+
+    changeColor(){
+      if(this.promotionAsPercentage>=50 && this.promotionAsPercentage<80){
+        return "#FD6E6E";
+        
+      }if(this.promotionAsPercentage>=80 ) {
+         return "#FDC040";
+      } else {
+        return "#28e3d7";
+      }
+    }
   },
   methods: {
     addToCart() {
@@ -90,6 +111,7 @@ p{
   overflow: hidden;
   background-color: #fff;
   transition: box-shadow 0.3s ease;
+  position: relative;
 }
 .card:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -107,7 +129,7 @@ img{
   align-items: center;
   justify-content: center;
   border-radius: 0 15px 15px 0;
-  position: relative;
+  position: absolute;
   top: 10px;
   left: 0px;
 }

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <h2>Popular Products</h2>
     <div class="popular-products">
@@ -40,4 +40,10 @@ export default {
     return { popularProducts };
   },
 };
+</script> -->
+<template>
+  <p>Get Popular Product by Count Sold</p>
+</template >
+<script setup>
+
 </script>

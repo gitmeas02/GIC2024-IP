@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <h2>Products in Category {{ categoryId }}</h2>
     <div class="products-list">
@@ -43,4 +43,10 @@ export default {
     return { products };
   },
 };
+</script> -->
+
+<template>
+<p> Get product by Id</p>
+</template>
+<script setup>
 </script>

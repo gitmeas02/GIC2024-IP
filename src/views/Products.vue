@@ -12,56 +12,6 @@
         :size="product.size" 
         :price="product.price" 
       />
-      <CardProduct 
-        v-for="product in products" 
-        :key="product.id" 
-        :promotionAsPercentage="product.promotionAsPercentage" 
-        :image="product.image" 
-        :name="product.name" 
-        :rating="product.rating" 
-        :size="product.size" 
-        :price="product.price" 
-      />
-      <CardProduct 
-        v-for="product in products" 
-        :key="product.id" 
-        :promotionAsPercentage="product.promotionAsPercentage" 
-        :image="product.image" 
-        :name="product.name" 
-        :rating="product.rating" 
-        :size="product.size" 
-        :price="product.price" 
-      />
-      <CardProduct 
-        v-for="product in products" 
-        :key="product.id" 
-        :promotionAsPercentage="product.promotionAsPercentage" 
-        :image="product.image" 
-        :name="product.name" 
-        :rating="product.rating" 
-        :size="product.size" 
-        :price="product.price" 
-      />
-      <CardProduct 
-        v-for="product in products" 
-        :key="product.id" 
-        :promotionAsPercentage="product.promotionAsPercentage" 
-        :image="product.image" 
-        :name="product.name" 
-        :rating="product.rating" 
-        :size="product.size" 
-        :price="product.price" 
-      />
-      <CardProduct 
-        v-for="product in products" 
-        :key="product.id" 
-        :promotionAsPercentage="product.promotionAsPercentage" 
-        :image="product.image" 
-        :name="product.name" 
-        :rating="product.rating" 
-        :size="product.size" 
-        :price="product.price" 
-      />
     </div>
 </div>
 </template>
