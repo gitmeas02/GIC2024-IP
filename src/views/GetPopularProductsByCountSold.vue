@@ -1,49 +1,44 @@
 <!-- <template>
-  <div>
-    <h2>Popular Products</h2>
-    <div class="popular-products">
-      <CardProduct
-        v-for="product in popularProducts"
-        :key="product.id"
-        :promotionAsPercentage="product.promotionAsPercentage"
-        :name="product.name"
-        :image="product.image"
-        :rating="product.rating"
-        :size="product.size"
-        :price="product.price"
-      />
-    </div>
-  </div>
+<div class="product-container">
+<div class="product">
+  <CardProduct
+      v-for="product in productCountSolve"
+      :key="product.id"
+      :name="product.name"
+      :promotionAsPercentage="product.promotionAsPercentage"
+      :image="product.image"
+      :rating="product.rating"
+      :size="product.size"
+      :price="product.price"
+    />
+</div>
+</div>
 </template>
-
 <script>
-import { useProductStore } from "@/stores/Product";
 import CardProduct from '@/components/CardProduct.vue';
-import { ref } from "vue";
+import { useProductStore } from '@/stores/Product';
+import { mapState } from 'pinia';
 
-export default {
-  name: "GetPopularProductsByCountSold",
-  components: {
-    CardProduct,
+export default{
+  components:{
+    CardProduct
   },
-  setup() {
-    const store = useProductStore();
-    const popularProducts = ref([]);
-
-    const fetchPopularProducts = async () => {
-      await store.fetchPopularProducts();
-      popularProducts.value = store.popularProducts;
-    };
-
-    fetchPopularProducts();
-
-    return { popularProducts };
-  },
-};
-</script> -->
-<template>
-  <p>Get Popular Product by Count Sold</p>
-</template >
-<script setup>
-
+  computed:{
+    ...mapState(useProductStore,{
+      productCountSolve(store){
+        return store.getShortListProduct();
+      }
+    })
+},
+  mounted(){
+  const productStore = useProductStore();
+  productStore.fetchProducts();
+  }
+}
 </script>
+<style>
+.product{
+  display: flex;
+  flex-direction: row;
+}
+</style> -->

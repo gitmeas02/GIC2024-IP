@@ -31,10 +31,3 @@ export default {
   },
 };
 </script> -->
-
-<template>
-  <p>Get Categories by Group</p>
-</template>
-<script setup>
-
-</script>

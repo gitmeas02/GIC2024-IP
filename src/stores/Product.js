@@ -45,6 +45,11 @@ export const useProductStore = defineStore("product", {
         return state.categories.filter((category) => category.group === groupName);
       };
     },
+    getShortListProduct: (state) => {
+      return [...state.products]
+        .sort((a, b) => b.countSold - a.countSold)
+        .slice(0, 5); // Top 5 products
+    },
   },
 
   actions: {

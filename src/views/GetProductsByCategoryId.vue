@@ -45,8 +45,3 @@ export default {
 };
 </script> -->
 
-<template>
-<p> Get product by Id</p>
-</template>
-<script setup>
-</script>
