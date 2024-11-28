@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
  <div class="container-products">
   <div class="product-group">
   <CardProduct
@@ -81,4 +81,4 @@ export default {
   },
 };
 </script>
-
+ -->

@@ -3,7 +3,7 @@
     <h2>{{ title }}</h2>
     <div class="List">
       <ul v-for="nav in computedListBar" :key="nav">
-        <li 
+        <li
           @click.prevent="setCurrentNav(nav)" 
           :class="[activeTab === nav ? 'bold' : 'regular']">
           {{ nav }}
