@@ -7,8 +7,9 @@
     />
     <div class="product">
       <CardProduct
-        v-for="product in filteredProducts"
-        :key="product.id"
+        v-for="(product,index) in filteredProducts"
+        :key="product.index"
+        :id="product.id"
         :promotionAsPercentage="product.promotionAsPercentage"
         :image="product.image"
         :name="product.name"
@@ -21,13 +22,13 @@
 </template>
 
 <script>
-import CardProduct from '@/components/CardProduct.vue';
-import HeaderBar from '@/components/HeaderBar.vue';
-import { useProductStore } from '@/stores/Product';
-import { mapState } from 'pinia';
+import CardProduct from "@/components/CardProduct.vue";
+import HeaderBar from "@/components/HeaderBar.vue";
+import { useProductStore } from "@/stores/Product";
+import { mapState } from "pinia";
 
 export default {
-  name: 'Product',
+  name: "Product",
   components: { CardProduct, HeaderBar },
   setup() {
     const store = useProductStore();
@@ -35,36 +36,34 @@ export default {
   },
   data() {
     return {
-      currentGroupName: "All" // Default group to display all products
+      currentGroupName: "All", // Default group to display all products
     };
   },
   computed: {
     ...mapState(useProductStore, {
       groups: "groups",
-      products: "products"
+      products: "products",
     }),
     filteredProducts() {
-      // Filter products based on the selected group
-      if (this.currentGroupName === "All") {
-        return this.products;
-      }
-      return this.products.filter(
-        (product) => product.group === this.currentGroupName
-      );
-    }
+      return this.currentGroupName === "All"
+        ? this.products
+        : this.products.filter(
+            (product) => product.group === this.currentGroupName
+          );
+    },
   },
   methods: {
     updateCurrentGroup(groupName) {
-      this.currentGroupName = groupName; // Update the selected group
-    }
+      this.currentGroupName = groupName;
+    },
   },
   async mounted() {
-    // Fetch products and groups data when the component is mounted
     await this.store.fetchProducts();
     await this.store.fetchGroups();
-  }
+  },
 };
 </script>
+
 <style scoped>
 .product-container{
   display: flex;

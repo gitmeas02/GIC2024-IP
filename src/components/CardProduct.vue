@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <!-- Discount Label -->
-    <p class="discount" v-if="promotionAsPercentage > 0" :style="{backgroundColor:changeColor}"  >
+    <p class="discount" v-if="promotionAsPercentage > 0" :style="{ backgroundColor: changeColor }">
       <span class="number-discount">{{ changeValue }}</span>
     </p>
 
@@ -28,44 +28,33 @@
     <!-- Price and Add Section -->
     <div class="choose">
       <p class="price">
-        <span class="after-discount-price">
-          ${{ discountedPrice }}
-        </span>
-        <span v-if="promotionAsPercentage > 0"class="discount-price">${{ price }} </span>
+        <span class="after-discount-price">${{ discountedPrice }}</span>
+        <span v-if="promotionAsPercentage > 0" class="discount-price">${{ price }}</span>
       </p>
       <div class="add-section">
-        <button class="btn-add" @click="addToCart" >
-          Add to Cart
-        </button>
+        <router-link :to="'/product/' + id" class="btn-add">Add to cart</router-link>
       </div>
     </div>
   </div>
 </template>
 
-
 <script>
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  name: 'CardProduct',
+export default {
+  name: "CardProduct",
   props: {
-    promotionAsPercentage: Number,
-    image: String,
-    name: String,
-    rating: Number,
-    size: Number,
-    price: Number,
+    id: { type: Number, required: true },
+    promotionAsPercentage: { type: Number, required: true },
+    image: { type: String, required: true },
+    name: { type: String, required: true },
+    rating: { type: Number, required: true },
+    size: { type: Number, required: true },
+    price: { type: Number, required: true },
   },
   computed: {
-    changeValue(){
-      if(this.promotionAsPercentage>=50 && this.promotionAsPercentage<80){
-        return "Hot";
-        
-      }if(this.promotionAsPercentage>=80 ) {
-         return "Sale";
-      } else {
-        return `- ${this.promotionAsPercentage} %`;
-      }
+    changeValue() {
+      if (this.promotionAsPercentage >= 50 && this.promotionAsPercentage < 80) return "Hot";
+      if (this.promotionAsPercentage >= 80) return "Sale";
+      return `- ${this.promotionAsPercentage} %`;
     },
     images() {
       return JSON.parse(this.image);
@@ -79,25 +68,21 @@ export default defineComponent({
     discountedPrice() {
       return (this.price * (1 - this.promotionAsPercentage / 100)).toFixed(2);
     },
-
-    changeColor(){
-      if(this.promotionAsPercentage>=50 && this.promotionAsPercentage<80){
-        return "#FD6E6E";
-        
-      }if(this.promotionAsPercentage>=80 ) {
-         return "#FDC040";
-      } else {
-        return "#28e3d7";
-      }
-    }
-  },
-  methods: {
-    addToCart() {
-      alert(`Added ${this.name} to the cart.`);
+    changeColor() {
+      if (this.promotionAsPercentage >= 50 && this.promotionAsPercentage < 80) return "#FD6E6E";
+      if (this.promotionAsPercentage >= 80) return "#FDC040";
+      return "#28e3d7";
     },
   },
-});
+  methods: {
+    addToCart(productId) {
+      alert(`Added ${this.name} to the cart.`);
+      this.$router.push({ name: 'ProductDetails', params: { categoryId: productId } });
+    },
+  },
+};
 </script>
+
 <style scoped>
 p{
   margin:0;
@@ -229,6 +214,7 @@ img{
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  text-decoration: none;
 }
 .btn-add:hover {
   background-color: #2aa672;

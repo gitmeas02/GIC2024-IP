@@ -10,22 +10,22 @@ export const useProductStore = defineStore('product', {
          currProductGroup: "All",
     }),
     getters: {
+     getProductById: (state) => {
+          return (id) => state.products.find((product) => product.id === id);
+        },
      getCategoriesByGroup(groupName) {
           return (groupName) => this.categories.filter((category) => category.group === groupName)
      },
-
      getProductsByGroup() {
           return () => {
                if(this.currProductGroup === "All") return this.products
                return this.products.filter((product) => product.group === this.currProductGroup)
           }
      },
-
      getProductsByCategory(categoryId) {
           console.log("from store")
           console.log(this.currProductGroup)
           return (categoryId) => this.products.filter((product) => product.categoryId === categoryId)
-
      },
 
      getPopularProducts() {
@@ -52,9 +52,10 @@ export const useProductStore = defineStore('product', {
      async fetchProducts() {
           await axios.get("http://localhost:3000/api/products").then(res => {
           this.products = res.data;
+          console.log("Fetched Products:", res.data); // Log API data
      })
      },
-
+   
      async fetchGroups() {
           await axios.get("http://localhost:3000/api/groups").then(res => {
           this.groups = res.data;

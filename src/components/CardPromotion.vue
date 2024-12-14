@@ -56,7 +56,7 @@
   }
   
   .contents {
-    width:auto;
+      width:auto;
       position: absolute;
       left: 48px;
       bottom: 80px;
