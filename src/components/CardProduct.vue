@@ -77,7 +77,7 @@ export default {
   methods: {
     addToCart(productId) {
       alert(`Added ${this.name} to the cart.`);
-      this.$router.push({ name: 'ProductDetails', params: { categoryId: productId } });
+      // this.$router.push({ name: 'ProductDetails', params: { categoryId: productId } });
     },
   },
 };

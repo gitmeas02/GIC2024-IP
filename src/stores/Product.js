@@ -6,8 +6,9 @@ export const useProductStore = defineStore('product', {
          groups: [],
          promotions: [],
          categories: [],
-         products: [],
+     //     products: [],
          currProductGroup: "All",
+         products: JSON.parse(localStorage.getItem('products')) || [],
     }),
     getters: {
      getProductById: (state) => {
@@ -36,6 +37,10 @@ export const useProductStore = defineStore('product', {
 
     },
     actions: {
+     setProducts(products) {
+          this.products = products;
+          localStorage.setItem('products', JSON.stringify(products));
+        },
      async fetchCategories() {
           await axios.get("http://localhost:3000/api/categories").then(res => {
             this.categories = res.data;
