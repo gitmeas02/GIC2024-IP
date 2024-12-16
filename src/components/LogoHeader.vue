@@ -4,7 +4,7 @@
       <SearchBoxComponent />
       <div class="ACWC">
         <MenuItems label="Account" i="line-md:account" :reverse="false" />
-        <MenuItems label="Compare" i="circum:virus" :reverse="false"/>
+        <MenuItems label="Compare" i="material-symbols-light:cached-rounded" :reverse="false"/>
         <MenuItems label="WishList" i="line-md:heart" :reverse="false"/>
         <MenuItems label="Cart" i="material-symbols:shopping-cart-outline-sharp" :reverse="false" />
       </div>

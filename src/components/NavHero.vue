@@ -2,7 +2,7 @@
 <div class="container-nav-hero">
 <div class="Menu-Nav">
     <div class="All-Menu">
-    <Icon icon="ion:grid" class="icon-right"/>
+        <Icon icon="material-symbols-light:border-all-rounded" width="24" height="24" />
     <MenuItems label="Browse All Categories" :i="`material-symbols:keyboard-arrow-down`" :reverse="true"/>
    </div>
 <MenuItems label="Home" :reverse="true"/>

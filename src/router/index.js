@@ -1,31 +1,35 @@
-
 import DetailsView from '@/views/DetailsView.vue';
 import HomeView from '@/views/HomeView.vue';
 import ListView from '@/views/ListView.vue';
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 
-const routes =[
+const routes = [
   {
-    path:'/',
+    path: '/',
     name: 'home',
-    component:HomeView,
+    component: HomeView,
   },
   {
-    path: '/product/:id',
+    path: '/product/:id', 
     name: 'ProductDetails',
     component: DetailsView,
     props: true,
   },
   {
-    path:'/lists',
-    name:'lists',
-    component:ListView,
+    path: '/lists', 
+    name: 'AllCategories',
+    redirect: "/"
   },
-]
+  {
+    path: '/lists/:id', 
+    name: 'CategoryDetails',
+    component: ListView,
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-})
+});
 
 export default router;

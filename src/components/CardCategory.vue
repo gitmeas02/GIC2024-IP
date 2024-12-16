@@ -1,21 +1,23 @@
 <template>
-  <div class="fruits" :style="{ backgroundColor: color }">
+  <router-link :to="'/lists/' + id"  class="fruits" :style="{ backgroundColor: color }">
     <img :src="'http://localhost:3000/'+image" :alt="name" />
     <div class="name-price">
       <p>{{ name }}</p>
       <p class="price"><span>{{ productCount }}</span> items</p>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
 export default {
   props: {
-    name: String,
-    productCount: Number,
-    image: String,
-    color: String,
+    id: { type: Number, required: true },
+    image: { type: String, required: true },
+    name: { type: String, required: true },
+    color:{type:String,required:true},
+    productCount:{type:String,required:true}
   },
+
 };
 </script>
 

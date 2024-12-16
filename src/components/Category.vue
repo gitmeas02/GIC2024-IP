@@ -7,8 +7,9 @@
     />
     <div class="container">
       <CardCategory
-        v-for="category in filteredCategories"
-        :key="category.id"
+        v-for="(category,index) in filteredCategories"
+        :key="category.index"
+        :id="category.id"
         :name="category.name"
         :productCount="category.productCount"
         :image="category.image"
