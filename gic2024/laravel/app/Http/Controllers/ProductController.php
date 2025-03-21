@@ -8,12 +8,21 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     // --- Get all products
-    public function getProducts()
-    {
-        $products = Product::with('category')->get(); // Eager load the category relationship
+    // public function getProducts()
+    // {
+    //     $products = Product::with('category')->get(); // Eager load the category relationship
+    //     return response()->json($products);
+    // }
+    public function getProducts(){
+        $products= Product::all();
+        if ($products->isEmpty()) {
+            return response()->json([
+                'message' => 'No Data',
+                'data' => []
+            ], 404); // You can use 404 or 200 based on your requirement
+        }
         return response()->json($products);
     }
-
     // --- Create a new product
     public function createProduct(Request $request)
     {
@@ -39,7 +48,8 @@ class ProductController extends Controller
     // --- Get a specific product by ID
     public function getProduct($productId)
     {
-        $product = Product::with('category')->findOrFail($productId); // Eager load the category
+        // $product = Product::with('category')->findOrFail($productId); // Eager load the category
+        $product = Product::findOrFail($productId); // Eager load the category
         return response()->json($product);
     }
 

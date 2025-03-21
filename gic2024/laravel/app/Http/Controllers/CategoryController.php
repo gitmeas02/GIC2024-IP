@@ -57,7 +57,7 @@ public function updateCategory(Request $request, $categoryId)
 public function deleteCategory($categoryId)
 {
     $category = Category::findOrFail($categoryId);
-    $category->delete();
+    $category->products()->delete();
 
     return response()->json(['message' => 'Category deleted successfully']);
 }
