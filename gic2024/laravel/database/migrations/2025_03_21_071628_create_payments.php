@@ -21,7 +21,7 @@ return new class extends Migration
             
             $table->string('payment_method', 100);
             $table->decimal('amount', 10, 2); 
-            $table->timestamp('payment_date')->nullable(false); 
+            $table->timestamp('payment_date')->useCurrent();
             
             $table->timestamps();
         });

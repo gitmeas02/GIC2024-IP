@@ -13,15 +13,15 @@ class Order extends Model
     protected $fillable=[
         'total_price',
         'customer_id',
-        'order_date'
     ];
-    protected function orderDate():Attribute
+    protected function orderDate(): Attribute
     {
-        return Arribute::make(
-            set:fn ($value)=>Carbon::createFormFormat('d/m/Y H:i:s',$value)->format('Y-m-d H:i:s'),
-            get:fn ($value)=>Carbon::parse($value)->format('d/m/Y H:i:s')
+        return Attribute::make(
+            set: fn ($value) => Carbon::createFromFormat('d/m/Y H:i:s', $value)->format('Y-m-d H:i:s'),
+            get: fn ($value) => Carbon::parse($value)->format('d/m/Y H:i:s')
         );
     }
+    
     public function payment(){
         return $this->hasMany(Payment::class);
     }
@@ -29,6 +29,6 @@ class Order extends Model
         return $this->belongsTo(Customer::class);
     }
     public function order_product(){
-        return $this->belongsTo(OrderProduct::class);
+        return $this->hasMany(OrderProduct::class);
     }
 }
