@@ -16,7 +16,7 @@ class Customer extends Model
     public function cart(){
         return $this->hasMany(Cart::class);
     }
-    public function wishlish(){
+    public function wishlist() {//wishlists
         return $this->hasMany(Wishlist::class);
     }
     public function order(){

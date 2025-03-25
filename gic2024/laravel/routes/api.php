@@ -32,13 +32,11 @@ Route::controller(ProductController::class)->prefix('products')->group(function 
     Route::delete('/{productId}', 'deleteProduct'); 
 });
 
-Route::controller(OrderController::class)->prefix('orders')->group(function () {
-    Route::get('/', 'getOrders'); 
-    Route::post('/', 'createOrder'); 
-    Route::get('/{orderId}', 'getOrder');
-    Route::patch('/{orderId}', 'updateOrder'); 
-    Route::delete('/{orderId}', 'deleteOrder'); 
-});
+Route::post('/orders', [OrderController::class, 'createOrder']);
+Route::get('/orders', [OrderController::class, 'getOrders']);
+Route::get('/orders/{orderId}', [OrderController::class, 'getOrder']);
+Route::put('/orders/{orderId}', [OrderController::class, 'updateOrder']);
+Route::delete('/orders/{orderId}', [OrderController::class, 'deleteOrder']);
 
 Route::controller(WishlistController::class)->prefix('wishlists')->group(function () {
     Route::get('/', 'getAllWishlists'); 

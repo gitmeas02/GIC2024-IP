@@ -11,9 +11,9 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->decimal('total_price', 10, 2);
-            $table->timestamp('order_date')->useCurrent(); // Automatically set current timestamp if not provided
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->timestamp('order_date')->nullable();
             $table->timestamps();
         });
     }

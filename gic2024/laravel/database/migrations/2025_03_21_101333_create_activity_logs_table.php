@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('model_type');
-            $table->unsignedBigInteger('model_id');
+            $table->string('model');
+            $table->unsignedBigInteger('model_id')->nullable();
             $table->string('action');
             $table->json('change')->nullable();
-            $table->timestamp('created_ad');
+            $table->timestamp('created_at')->useCurrent();
+            
         });
     }
 
