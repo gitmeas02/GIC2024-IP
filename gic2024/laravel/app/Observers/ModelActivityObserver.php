@@ -2,56 +2,56 @@
 
 namespace App\Observers;
 
-use App\Models\Order;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\ActivityLog;
 class ModelActivityObserver
 {
     
-    public function created(Order $order): void
+    public function created(Model $model): void
     {
         ActivityLog::create([
-            'model' => get_class($order),
-            'model_id' => $order->id,
+            'model' => get_class($model),
+            'model_id' => $model->id,
             'action' => 'created',
-            'change' => json_encode($order->toArray()),
+            'change' => json_encode($model->toArray()),
         ]);
     }
 
 
-    public function updated(Order $order): void
+    public function updated(Model $model): void
     {
         ActivityLog::create([
-            'model' => get_class($order),
-            'model_id' => $order->id,
+            'model' => get_class($model),
+            'model_id' => $model->id,
             'action' => 'updated',
             'change' => json_encode([
-                'old' => $order->getOriginal(),
-                'new' => $order->getChanges(),
+                'old' => $model->getOriginal(),
+                'new' => $model->getChanges(),
             ]),
         ]);
     }
 
   
-    public function deleted(Order $order): void
+    public function deleted(Model $model): void
     {       
         ActivityLog::create([
-            'model'   => get_class($order),
-            'model_id' => $order->id,
+            'model'   => get_class($model),
+            'model_id' => $model->id,
             'action' => 'deleted',
-            'change' => json_encode($order->toArray()),
+            'change' => json_encode($model->toArray()),
     ]);
     }
 
     /**
      * Handle the Order "restored" event.
      */
-    public function restored(Order $order): void
+    public function restored(Model $model): void
     {
         ActivityLog::create([
-            'model' => get_class($order),
-            'model_id' => $order->id,
+            'model' => get_class($model),
+            'model_id' => $model->id,
             'action' => 'restored',
-            'changes' => json_encode($order->toArray()),
+            'changes' => json_encode($model->toArray()),
         ]);
 
     }
@@ -59,7 +59,7 @@ class ModelActivityObserver
     /**
      * Handle the Order "force deleted" event.
      */
-    public function forceDeleted(Order $order): void
+    public function forceDeleted(Model $Model): void
     {
         //
     }
