@@ -21,5 +21,6 @@ class AppServiceProvider extends ServiceProvider
         Product::observe(ModelActivityObserver::class);
         Wishlist::observe(ModelActivityObserver::class);
         Payment::observe(ModelActivityObserver::class);
+        Category::observe(ModelActivityObserver::class);
     }
 }

@@ -14,15 +14,16 @@ class CategoryController extends Controller
 public function getCategories()
 {
     $categories = Category::all();
+
     return response()->json($categories);
 }
 
 // --- Create a new category
 public function createCategory(Request $request)
 {
-    $request->validate([
-        'name' => 'required|string', // No uniqueness check
-    ]);
+    // $request->validate([
+    //     'name' => 'required|string', // No uniqueness check
+    // ]);
 
     $category = Category::create([
         'name' => $request->name,
@@ -34,32 +35,39 @@ public function createCategory(Request $request)
 // --- Get a specific category by ID
 public function getCategory($categoryId)
 {
-    $category = Category::findOrFail($categoryId);
+    $category = Category::find($categoryId);
+    if (!$category) {
+        // Return a custom 404 response if not found
+        return response()->json([
+            'message' => 'Category not found'
+        ], 404);
+    }
     return response()->json($category);
 }
 
 // --- Update a category
 public function updateCategory(Request $request, $categoryId)
 {
-    $request->validate([
-        'name' => 'required|string', // No uniqueness check
-    ]);
 
-    $category = Category::findOrFail($categoryId);
+    $category = Category::find($categoryId);
     $category->update([
         'name' => $request->name,
     ]);
 
-    return response()->json($category);
+    return $category;
 }
 
 // --- Delete a category
 public function deleteCategory($categoryId)
 {
     $category = Category::findOrFail($categoryId);
-    $category->products()->delete();
+    $category->delete();
 
-    return response()->json(['message' => 'Category deleted successfully']);
+
+    return response()->json([
+        'message' => 'Category deleted successfully',
+        'id' => $category->id
+    ], 200);
 }
     public function index()
     {

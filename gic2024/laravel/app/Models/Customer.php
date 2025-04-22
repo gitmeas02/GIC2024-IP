@@ -14,16 +14,16 @@ class Customer extends Model
         'address',
         'phone',
     ];
-    public function cart(){
+    public function carts(){
         return $this->hasMany(Cart::class);
     }
-    public function wishlist() {//wishlists
+    public function wishlists() {//wishlists
         return $this->hasMany(Wishlist::class);
     }
-    public function order(){
+    public function orders(){
         return $this->hasMany(Order::class);
     }
-    public function payment(){
+    public function payments(){
         return $this->hasMany(Payment::class);
     }
     public function products(){
