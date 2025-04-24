@@ -15,12 +15,6 @@ class ProductController extends Controller
     // }
     public function getProducts(){
         $products= Product::all();
-        if ($products->isEmpty()) {
-            return response()->json([
-                'message' => 'No Data',
-                'data' => []
-            ], 404); // You can use 404 or 200 based on your requirement
-        }
         return response()->json($products);
     }
     // --- Create a new product
@@ -49,31 +43,56 @@ class ProductController extends Controller
     public function getProduct($productId)
     {
         // $product = Product::with('category')->findOrFail($productId); // Eager load the category
-        $product = Product::findOrFail($productId); // Eager load the category
-        return response()->json($product);
+        $product = Product::find($productId);
+        if (!$product) {
+            return response()->json([
+                'message' => 'Product not found'
+            ], 404);
+        } // Eager load the category
+        return response()->json($product,200);
     }
 
     // --- Update a product
     public function updateProduct(Request $request, $productId)
-    {
-        $request->validate([
-            'name' => 'sometimes|string',
-            'category_id' => 'sometimes|exists:categories,id',
-            'pricing' => 'sometimes|numeric',
-            'description' => 'nullable|string',
-            'images' => 'nullable|array', // Ensure 'images' is an array
-        ]);
+{
+    $product = Product::find($productId);
 
-        $product = Product::findOrFail($productId);
-        $product->update($request->only(['name', 'category_id', 'pricing', 'description', 'images']));
-
-        return response()->json($product);
+    if (!$product) {
+        return response()->json([
+            'message' => 'Product not found'
+        ], 404);
     }
+
+    $validatedData = $request->validate([
+        'name' => 'sometimes|string|max:255',
+        'category_id' => 'sometimes|exists:categories,id',
+        'pricing' => 'sometimes|numeric|min:0',
+        'description' => 'nullable|string',
+        'images' => 'nullable|array',
+    ]);
+
+    if (isset($validatedData['images'])) {
+        $validatedData['images'] = json_encode($validatedData['images']);
+    }
+
+    $product->update($validatedData);
+
+    return response()->json([
+        'message' => 'Product updated successfully',
+        'product' => $product->fresh(),
+    ], 200);
+}
+
 
     // --- Delete a product
     public function deleteProduct($productId)
     {
-        $product = Product::findOrFail($productId);
+        $product = Product::find($productId);
+        if (!$product) {
+            return response()->json([
+                'message' => 'Product not found'
+            ], 404);
+        }
         $product->delete();
 
         return response()->json(['message' => 'Product deleted successfully']);
