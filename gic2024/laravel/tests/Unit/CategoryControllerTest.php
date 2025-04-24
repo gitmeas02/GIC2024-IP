@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-// use App\Models\Category;
+use App\Models\Category;
 // use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -29,48 +29,7 @@ class CategoryControllerTest extends TestCase
         $response = $this->get('/api/categories');
         $response->assertStatus(200);
     }
-
-       /**
-     * Test ID: Category-003
-     * Description: Check if we can retrieve a category by its ID using the API.
-     * Precondition: The database must contain a category with a known ID.
-     * Test Steps:
-     *  1. Hit the GET category API with an existing category ID.
-     *  2. Check if the response status is 200 and the JSON structure contains 'id' and 'name'.
-     *  3. Hit the GET category API with a non-existent category ID.
-     *  4. Check if the response status is 404 and the JSON contains the error message 'Category not found'.
-     * Test Data:
-     *          1. Existing Category ID: 72 (replace with an actual ID from your database).
-     *          2. Non-existent Category ID: 9999.
-     * Expected Result:
-     *          1. For the existing category ID, the response status should be 200, and the JSON structure should include 'id' and 'name'.
-     *          2. For the non-existent category ID, the response status should be 404, and the JSON should contain the error message 'Category not found'.
-     * Actual Result: 
-     *          1. Response returned 200 for the existing category ID.
-     *          2. Response returned 404 for the non-existent category ID.
-     * Status: PASSED
-     * Remark: None
-     */
-    public function test_get_category_by_id()
-    {
-        // Scenario 1: Category exists
-        $existingCategoryId = 72; // Replace with an ID that exists in your database
-        $response = $this->get("/api/categories/{$existingCategoryId}");
-        $response->assertStatus(200)
-                 ->assertJsonStructure([
-                     'id',
-                     'name',
-                 ]);
-    
-        // Scenario 2: Category does not exist
-        $nonExistentId = 9999; // Use an ID that does not exist
-        $response = $this->get("/api/categories/{$nonExistentId}");
-        $response->assertStatus(404)
-                 ->assertJson([
-                     'message' => 'Category not found',
-                 ]);
-    }
-       /**
+   /**
      * Test ID: Category-002
      * Description: Check if we can create a category using the api
      * Precondition: None
@@ -93,26 +52,110 @@ class CategoryControllerTest extends TestCase
             'name' => 'New Category',
         ];
 
-        $response = $this->post('/api/categories', $data);
+        $response = $this->postJson('/api/categories', $data);
 
         $response->assertStatus(201);
         $response->assertJson([
             'name' => 'New Category']);
     }
+       /**
+     * Test ID: Category-003
+     * Description: Check if we can retrieve a category by its ID using the API.
+     * Precondition: The database must contain a category with a known ID.
+     * Test Steps:
+     *  1. Hit the GET category API with an existing category ID.
+     *  2. Check if the response status is 200 and the JSON structure contains 'id' and 'name'.
+     *  3. Hit the GET category API with a non-existent category ID.
+     *  4. Check if the response status is 404 and the JSON contains the error message 'Category not found'.
+     * Test Data:
+     *          1. Existing Category ID: 72 (replace with an actual ID from your database).
+     *          2. Non-existent Category ID: 9999.
+     * Expected Result:
+     *          1. For the existing category ID, the response status should be 200, and the JSON structure should include 'id' and 'name'.
+     *          2. For the non-existent category ID, the response status should be 404, and the JSON should contain the error message 'Category not found'.
+     * Actual Result: 
+     *          1. Response returned 200 for the existing category ID.
+     *          2. Response returned 404 for the non-existent category ID.
+     * Status: PASSED
+     * Remark: None
+     */
+  
+    public function test_get_category_by_id()
+    {
+        // Scenario 1: Category exists - use factory to create one
+        $category = Category::factory()->create();
+
+        $response = $this->get("/api/categories/{$category->id}");
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     'id',
+                     'name',
+                 ])
+                 ->assertJson([
+                     'id' => $category->id,
+                     'name' => $category->name,
+                 ]);
+
+        // Scenario 2: Category does not exist
+        $nonExistentId = $category->id + 1; // safe because DB is refreshed
+
+        $response = $this->get("/api/categories/{$nonExistentId}");
+
+        $response->assertStatus(404)
+                 ->assertJson([
+                     'message' => 'Category not found',
+                 ]);
+    }
+    
     
 public function test_if_we_can_access_update_a_category_by_id_api(): void
 {
-    $response = $this->patch('/api/categories/72', ["name" => "test_category_updated"]);
-    $response->assertStatus(200)->assertJson([ 
-        "name" => "test_category_updated"
-    ]);
+    // Scenario 1: Category exists - use factory to create one
+    $category = Category::factory()->create();
+
+    $data = [
+        'name' => 'test_category_updated',
+    ];
+
+    $response = $this->patch("/api/categories/{$category->id}", $data);
+
+    $response->assertStatus(200)
+             ->assertJson([
+                 'id' => $category->id,
+                 'name' => 'test_category_updated',
+             ]);
+
+    // Scenario 2: Category does not exist
+    $nonExistentId = $category->id + 1; // safe because DB is refreshed
+
+    $response = $this->patch("/api/categories/{$nonExistentId}", $data);
+
+    $response->assertStatus(404)
+             ->assertJson([
+                 'message' => 'Category not found',
+             ]);
 }
 
-public function test_if_we_can_access_delte_a_category_by_id_api(): void
+public function test_if_we_can_access_delete_a_category_by_id_api(): void
 {
-    $response = $this->delete('/api/categories/72');
-    $response->assertStatus(200)->assertJson([
-        'message' => 'Category deleted successfully',
-    ]);
+    // Scenario 1: Category exists - use factory to create one
+    $category = Category::factory()->create();
+
+    $response = $this->delete("/api/categories/{$category->id}");
+
+    $response->assertStatus(200)
+             ->assertJson([
+                 'message' => 'Category deleted successfully',
+             ]);
+
+    // Scenario 2: Category does not exist
+    $nonExistentId = $category->id + 1; // safe because DB is refreshed
+
+    $response = $this->delete("/api/categories/{$nonExistentId}");
+
+    $response->assertStatus(404)->assertJson([
+        'message' => 'Category not found',
+    ]);;
 }
 }

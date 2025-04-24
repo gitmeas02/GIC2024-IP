@@ -50,6 +50,12 @@ public function updateCategory(Request $request, $categoryId)
 {
 
     $category = Category::find($categoryId);
+    if (!$category) {
+        // Return a custom 404 response if not found
+        return response()->json([
+            'message' => 'Category not found'
+        ], 404);
+    }
     $category->update([
         'name' => $request->name,
     ]);
@@ -60,14 +66,18 @@ public function updateCategory(Request $request, $categoryId)
 // --- Delete a category
 public function deleteCategory($categoryId)
 {
-    $category = Category::findOrFail($categoryId);
-    $category->delete();
-
-
+    $category = Category::find($categoryId);
+        if(!$category){
+            return response()->json([
+                'message' => 'Category not found'
+            ], 404);
+        }
+        $category->delete();
+        
     return response()->json([
         'message' => 'Category deleted successfully',
         'id' => $category->id
-    ], 200);
+    ], status: 200);
 }
     public function index()
     {
