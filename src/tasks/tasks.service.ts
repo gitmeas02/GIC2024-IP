@@ -1,49 +1,34 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Task } from './entities/task.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
+import { Task } from './entities/task.entity';
 
 @Injectable()
 export class TasksService {
- constructor(
-  @InjectRepository(Task)
-  private taskRepo:Repository<Task>,
+  constructor(
+    @InjectRepository(Task)
+    private taskRepo : Repository<Task>
+  ){}
 
-  @InjectRepository(User)
-  private userRepo:Repository<User>
- ){}
-
-  async create(CreateTaskDto: CreateTaskDto, userId:number) {
-    const user = await this.userRepo.findOne({where:{id:userId}});
-    if(!user) throw new NotFoundException('User not found');
-    const task = this.taskRepo.create({
-      ...CreateTaskDto,
-      user,
-    })
+  create( taskData: Partial<Task>) {
+    const task = this.taskRepo	.create(taskData);
     return this.taskRepo.save(task);
   }
 
   findAll() {
-    return this.taskRepo.find({relations:['user']});
+    return this.taskRepo.find();
   }
 
-  async findOne(id: number) {
-    const task = await this.taskRepo.findOne({where:{id},relations:['user']});
-        if(!task) throw new NotFoundException('Task Not found');
-    return task;
+  findOne(id: number) {
+  return this.taskRepo.findOne({where:{id}})
   }
 
-  async update(id: number, updateTaskDto: UpdateTaskDto) {
-    const task = await this.findOne(id);
-    Object.assign(task,updateTaskDto);
-    return this.taskRepo.save(task);
+  async update(id: number, updateData: Partial<Task>) {
+    await this.taskRepo.update(id,updateData);
+    return this.findOne(id);
   }
 
-  async remove(id: number) {
-    const task = await this.findOne(id);
-    return this.taskRepo.remove(task);
+  remove(id: number) {
+    return this.taskRepo.delete(id);
   }
 }
