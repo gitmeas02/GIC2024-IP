@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 // import { CreateUserDto } from './dto/create-user.dto';
 // import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
+  private users=[];
   constructor(
     @InjectRepository(User)
     private userRepo : Repository<User>
@@ -21,9 +22,17 @@ export class UsersService {
     return this.userRepo.find({relations:['tasks']});
   }
 
-  findOne(id: number) {
-    return this.userRepo.findOne({where:{id},relations:['tasks']})
+async findOne(id: number) {
+  const user = await this.userRepo.findOne({
+    where: { id },
+    relations: ['tasks'], // eager load related tasks
+  });
+
+  if (!user) {
+    throw new NotFoundException(`User with id ${id} not found`);
   }
+  return user;
+}
 
   async update(id: number, updateData: Partial<User>) {
     await this.userRepo.update(id,updateData);
