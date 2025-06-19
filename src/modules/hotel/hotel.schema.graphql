@@ -1,0 +1,17 @@
+type Hotel {
+  id: Int!
+  name: String!
+  author: String!
+  price: Int!
+}
+
+type Query {
+  hotels: [Hotel]
+  hotel(id: Int!): Hotel
+}
+
+type Mutation {
+  addHotel(name: String!, price: Int!,author: String!): Hotel
+  updateHotel(id: Int!, name: String, price: Int): Hotel
+  deleteHotel(id: Int!): Boolean
+}
